@@ -7,9 +7,8 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract NamePlaceholder is ERC1155, Ownable, ERC1155Pausable, ERC1155Supply, IERC2981, ReentrancyGuard {
+contract NamePlaceholder is ERC1155, Ownable, ERC1155Pausable, ERC1155Supply, IERC2981 {
 
     // ERRORS 
 
@@ -50,7 +49,7 @@ contract NamePlaceholder is ERC1155, Ownable, ERC1155Pausable, ERC1155Supply, IE
 
     // MINT
 
-    function mint(uint256 id) public payable nonReentrant {
+    function mint(uint256 id) public payable {
 
         // Checks
         if (!tokenUnlocked[id]) {
