@@ -30,6 +30,8 @@ contract NamePlaceholder is ERC1155, Ownable, ERC1155Pausable, ERC1155Supply, IE
 
     event Minted(address indexed minter, uint256 indexed id, uint256 quantity);
 
+    // CONSTRUCTOR
+
     constructor(address initialOwner)
         ERC1155("uri_placeholder")
         Ownable(initialOwner)
@@ -41,6 +43,12 @@ contract NamePlaceholder is ERC1155, Ownable, ERC1155Pausable, ERC1155Supply, IE
         mintPrice[0] = 10 ether; // Initial mint price
         incrementAmount[0] = 2 ether; // Increment price after each mint
     }
+
+    function supportsInterface(bytes4 interfaceId) public view override(IERC165, ERC1155) returns (bool) {
+        return interfaceId == type(IERC2981).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    // MINT
 
     function mint(uint256 id) public payable nonReentrant {
 
@@ -63,13 +71,7 @@ contract NamePlaceholder is ERC1155, Ownable, ERC1155Pausable, ERC1155Supply, IE
         emit Minted(msg.sender, id, 1);
     }
 
-    function pause() public onlyOwner {
-        _pause();
-    }
-
-    function unpause() public onlyOwner {
-        _unpause();
-    }
+    // ROYALTIES
 
     function royaltyInfo(uint256, /*_tokenId*/ uint256 _salePrice)
         external
@@ -84,6 +86,14 @@ contract NamePlaceholder is ERC1155, Ownable, ERC1155Pausable, ERC1155Supply, IE
     receive() external payable {} // Allow payment collection
 
     // OWNABLE
+
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
+    }
 
     function withdraw(address _addr) external onlyOwner {
         // Withdraw funds to owner address
